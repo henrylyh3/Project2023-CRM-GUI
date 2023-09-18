@@ -21,6 +21,7 @@ import { MatTable } from '@angular/material/table';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatIconModule} from '@angular/material/icon';
 
 
 import { CommonModule } from '@angular/common';
@@ -48,7 +49,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
+    MatIconModule,
     MatPaginatorModule,
     
     MatSortModule,

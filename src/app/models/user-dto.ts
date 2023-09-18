@@ -1,8 +1,10 @@
 export class UserDto {
+    id: string;
+    userId: number;
     userName: string;
     email: string;
     phone: string;
-    skillset: string;
-    hobby: string;
+    skills: string;
+    hobbies: string;
 }
   

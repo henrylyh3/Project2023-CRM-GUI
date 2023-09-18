@@ -39,31 +39,55 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class UserComponent implements OnInit {
  isBusy = true;
+
   columns = [
     {
-      columnDef: 'position',
-      header: 'No.',
-      cell: (element: PeriodicElement) => `${element.position}`,
+      columnDef: 'Id',
+      header: 'Id.',
+      cell: (element: UserDto) => `${element.id}`,
     },
     {
-      columnDef: 'name',
-      header: 'Name',
-      cell: (element: PeriodicElement) => `${element.name}`,
+      columnDef: 'userId',
+      header: 'userId',
+      cell: (element: UserDto) => `${element.userId}`,
     },
     {
-      columnDef: 'weight',
-      header: 'Weight',
-      cell: (element: PeriodicElement) => `${element.weight}`,
+      columnDef: 'userName',
+      header: 'userName',
+      cell: (element: UserDto) => `${element.userName}`,
     },
     {
-      columnDef: 'symbol',
-      header: 'Symbol',
-      cell: (element: PeriodicElement) => `${element.symbol}`,
+      columnDef: 'email',
+      header: 'email',
+      cell: (element: UserDto) => `${element.email}`,
     },
+    {
+      columnDef: 'phone',
+      header: 'phone',
+      cell: (element: UserDto) => `${element.phone}`,
+    },
+    {
+      columnDef: 'skills',
+      header: 'skills',
+      cell: (element: UserDto) => `${element.skills}`,
+    },
+    {
+      columnDef: 'hobbies',
+      header: 'hobbies',
+      cell: (element: UserDto) => `${element.hobbies}`,
+    },
+    // {
+    //   columnDef: 'action',
+    //   header: 'Action',
+    //   // cell: (element: UserDto) => `${element.hobbies}`,
+    // },
   ];
+  filter='';
   dataSource : any;
   displayedColumns = this.columns.map(c => c.columnDef);
-    @ViewChild(MatPaginator) paginator: MatPaginator;
+  columnsToDisplayWithExpand = [...this.displayedColumns, 'action'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   selectedUser: UserDto;
   constructor(private router: Router,
@@ -82,19 +106,23 @@ export class UserComponent implements OnInit {
     this.isBusy = true;
     const todayDate = new Date();
     this.userService.getUsers().subscribe((result) => {
+      // debugger;
+      console.log(result);
       this.dataSource = new MatTableDataSource<UserDto>(result);
+      this.dataSource.paginator = this.paginator;
+
       this.isBusy = false;
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  // ngAfterViewInit() {
+  //   this.dataSource.paginator = this.paginator;
 
-  }
+  // }
   
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    // const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = this.filter.trim().toLowerCase();
   }
 
   openAddDialog(): void {

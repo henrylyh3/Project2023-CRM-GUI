@@ -14,3 +14,13 @@ table {
   .demo-table {
     width: 100%;
   }
+
+  .action-buttons {
+    display: flex;
+    justify-content: space-between; /* Adjust as needed */
+    align-items: center; /* Center vertically */
+  }
+
+  .action-buttons button {
+    margin-right: 8px; /* Adjust the margin as needed */
+  }

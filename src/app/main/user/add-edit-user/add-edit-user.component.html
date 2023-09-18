@@ -1,0 +1,55 @@
+<form>
+    <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+              {{mode}} user
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="form-field">
+            <label>Name:{{user.userName}}</label>
+            <mat-form-field>
+              <input matInput [(ngModel)]="user.userName" name="name" required>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <label>Email:</label>
+            <mat-form-field>
+              <input matInput [(ngModel)]="user.email" name="email" required>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <label>Phone:</label>
+            <mat-form-field>
+              <input matInput [(ngModel)]="user.phone" name="phone" required>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <label>Skills:</label>
+            <mat-form-field>
+              <input matInput [(ngModel)]="user.skills" name="skills" required>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <label>Hobbies:</label>
+            <mat-form-field>
+              <input matInput [(ngModel)]="user.hobbies" name="hobbies" required>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button style="float: right;" mat-raised-button color="primary" *ngIf="mode=='Add'; else elseTemplate" (click)="save()">Add</button>
+          <ng-template #elseTemplate>
+            <button style="float: right;" mat-raised-button color="primary" (click)="save()">Update</button>
+          </ng-template>
+          <button style="float: right;" mat-raised-button color="secondary" (click)="cancel()">Cancel</button>
+
+        </mat-card-actions>
+    </mat-card>
+</form>

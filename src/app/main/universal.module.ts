@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
-// import { SharedModule } from '@shared';
 
-// import { NzModalRef } from 'ng-zorro-antd/modal';
-
-import { UserComponent} from './user/user.component';
-import { AddEditUserComponent} from './user/add-edit-user/add-edit-user.component';
-import { UserRoutingModule} from './user-routing.module';
-
+//component
+import { UserComponent} from '@main/user/user.component';
+import { AddEditUserComponent} from '@main/user/add-edit-user/add-edit-user.component';
+import { UniversalRoutingModule } from './universal-routing.module';
+import { AlertDialogComponent } from '@main/common/alert-dialog.component';
 
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
@@ -32,11 +30,11 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
   declarations: [
     AddEditUserComponent,
     UserComponent,
-    
+    AlertDialogComponent
     
   ],
   imports: [
-    UserRoutingModule,
+    UniversalRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -57,4 +55,4 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
   ],
   // imports: [SharedModule, ContentRoutingModule, EditorModule],
 })
-export class UserModule { }
+export class UniversalModule { }

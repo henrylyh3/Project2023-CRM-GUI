@@ -7,9 +7,11 @@ import { AddEditUserComponent } from './add-edit-user/add-edit-user.component';
 
 import { UserDto } from '@models/user-dto';
 import { UserService } from '@services/user.service';
+import { ConfirmationDialogService } from '@services/confirmation-dialog-service';
 import {NgFor} from '@angular/common';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { AlertDialogComponent } from '@main/common/alert-dialog.component'; 
 
 @Component({
   selector: 'CRM-user',
@@ -56,6 +58,7 @@ export class UserComponent implements OnInit {
   selectedUser: UserDto;
   constructor(private router: Router,
     private route: ActivatedRoute,
+    private confirmationDialogService: ConfirmationDialogService,
     public dialog: MatDialog,
     private fb: FormBuilder,
     private userService : UserService
@@ -100,6 +103,44 @@ export class UserComponent implements OnInit {
 
   delete(input: number): void {
     console.log(this.dataSource.filteredData[input]);
+    this.confirmationDialogService
+    .openConfirmationDialog('Delete', 'Are you sure you want to proceed?')
+    .subscribe((confirmed) => {
+      if (confirmed) {
+        // User confirmed, proceed with the action
+        // Add your action here
+        console.log('User confirmed');
+        this.userService.deleteUser(this.dataSource.filteredData[input].id).subscribe(
+          () => {
+              // this.dialogRef.close();
+              const dialogRef = this.dialog.open(AlertDialogComponent, {
+                  width: '250px',
+                  data: {
+                  title: 'Success',
+                  message: 'Successfully delete user.'
+                  }
+              });
+              dialogRef.afterClosed().subscribe(result => {
+                this.getUsers();
+              });
+          },
+          (error) => {
+              const dialogRef = this.dialog.open(AlertDialogComponent, {
+                  width: '250px',
+                  data: {
+                  title: 'Error',
+                  message: 'Failed to delete user.'
+                  }
+              });
+          },
+      );
+      } else {
+        // User canceled
+        console.log('User canceled');
+      }
+    });
+
+    
   }
 
 }

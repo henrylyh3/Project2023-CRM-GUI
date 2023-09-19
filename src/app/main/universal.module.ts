@@ -5,7 +5,8 @@ import { UserComponent} from '@main/user/user.component';
 import { AddEditUserComponent} from '@main/user/add-edit-user/add-edit-user.component';
 import { UniversalRoutingModule } from './universal-routing.module';
 import { AlertDialogComponent } from '@main/common/alert-dialog.component';
-
+import { ConfirmationDialogComponent } from '@main/common/confirmation-dialog-component';
+import { ConfirmationDialogService } from '@services/confirmation-dialog-service';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,8 +31,9 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
   declarations: [
     AddEditUserComponent,
     UserComponent,
-    AlertDialogComponent
-    
+    AlertDialogComponent,
+    ConfirmationDialogComponent,
+    // ConfirmationDialogService
   ],
   imports: [
     UniversalRoutingModule,
@@ -53,6 +55,7 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
     MatSortModule,
     MatTableModule,
   ],
+  providers: [ConfirmationDialogService], 
   // imports: [SharedModule, ContentRoutingModule, EditorModule],
 })
 export class UniversalModule { }

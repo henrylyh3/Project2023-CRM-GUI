@@ -1,27 +1,36 @@
 # CRMGUI
 
+<!-- ABOUT THE PROJECT -->
+This is a simple project that is built for accessing a list of contact that have details of its username, email, phone, skills and hobbies.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.2.
 
-## Development server
+There is only one page in this project which is the user listing page, any other operation (add, edit, delete) will be in the form of popup for the specific purpose.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This project is mainly using angular material for the styling and component. It is split into different category (main, models, services)
+- main (component for the pages, dialog)
+- services (for conducting http service with backend)
+- models (dtos)
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+<!-- GETTING STARTED -->
+Guide to install Angular : https://angular.io/guide/setup-local
 
-## Build
+Run `npm-install` to install packages and then `npm start` to run the project
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+<!-- How to Use the Project -->
+after running `npm start`, browse to  http://localhost:4200/
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+<!-- Further enhancement -->
+The future enhancement for this project will be 
+- adding logging
+- introduce account (login, sign up)
+- add loading 
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+<!-- CONTACT -->
+Lee Yoong Hean - henrylyh96@gmail.com
+Project Link: https://github.com/henrylyh3/Project2023-CRM-API.git
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+CRMGUI

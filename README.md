@@ -31,6 +31,6 @@ The future enhancement for this project will be
 
 <!-- CONTACT -->
 Lee Yoong Hean - henrylyh96@gmail.com
-Project Link: https://github.com/henrylyh3/Project2023-CRM-API.git
+Project Link: https://github.com/henrylyh3/Project2023-CRM-GUI.git
 
 CRMGUI

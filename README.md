@@ -33,4 +33,9 @@ The future enhancement for this project will be
 Lee Yoong Hean - henrylyh96@gmail.com
 Project Link: https://github.com/henrylyh3/Project2023-CRM-GUI.git
 
+<!-- ADD ON-->
+- Enhancement to validate input by each type (text, phone, email)
+- Enhancement to bulk add / bulk delete
+- Filter in database with pagination
+
 CRMGUI

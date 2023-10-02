@@ -24,27 +24,27 @@ export class UserComponent implements OnInit {
   columns = [
     {
       columnDef: 'userName',
-      header: 'userName',
+      header: 'Name',
       cell: (element: UserDto) => `${element.userName}`,
     },
     {
       columnDef: 'email',
-      header: 'email',
+      header: 'Email',
       cell: (element: UserDto) => `${element.email}`,
     },
     {
       columnDef: 'phone',
-      header: 'phone',
+      header: 'Phone',
       cell: (element: UserDto) => `${element.phone}`,
     },
     {
       columnDef: 'skills',
-      header: 'skills',
+      header: 'Skills',
       cell: (element: UserDto) => `${element.skills}`,
     },
     {
       columnDef: 'hobbies',
-      header: 'hobbies',
+      header: 'Hobbies',
       cell: (element: UserDto) => `${element.hobbies}`,
     },
   ];

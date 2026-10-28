@@ -1,6 +1,6 @@
 import { finalize } from 'rxjs/operators';
 
-import { Component, Input, OnInit, Inject, Optional, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -25,16 +25,12 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
 export class AddEditUserComponent implements OnInit {
     mode="Add";
     user: UserDto = new UserDto();
-    constructor(
-        private formBuilder: FormBuilder,
-        private userService : UserService,
-        private dialog: MatDialog,
-        @Optional() public dialogRef: MatDialogRef<AddEditUserComponent> | null,
-        @Optional() @Inject(MAT_DIALOG_DATA) public data: UserDto | null,
-        private router: Router,
-    ) {
-
-     }
+    private formBuilder = inject(FormBuilder);
+    private userService = inject(UserService);
+    private dialog = inject(MatDialog);
+    public dialogRef = inject<MatDialogRef<AddEditUserComponent>>(MatDialogRef, { optional: true });
+    public data = inject<UserDto>(MAT_DIALOG_DATA, { optional: true });
+    private router = inject(Router);
 
     ngOnInit(): void {
         if(this.data)

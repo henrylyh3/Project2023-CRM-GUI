@@ -29,7 +29,7 @@ Bootstrap now loads its distributed CSS, preserving its original stylesheet
 order without deprecated application-level Sass imports. The application
 builder still writes deployment files to `dist/crm-gui`, preserving the old path.
 
-- `npm run build` after routing consolidation: passed. Initial bundle 790.89 kB raw / 149.96 kB estimated
+- `npm run build` after modern DI migration: passed. Initial bundle 790.88 kB raw / 149.85 kB estimated
   transfer. Existing 500 kB warning threshold remains exceeded; 1 MB error
   threshold remains unchanged.
 - Historical step 2 test run: 26 tests passed in Chrome Headless. Coverage included HTTP
@@ -94,6 +94,39 @@ Signals, OnPush, and zoneless conversion are separate future steps.
 Measured production initial bundle: 806.38 kB before standalone conversion,
 787.38 kB after step 2, and 790.89 kB after single-file routing consolidation.
 These are bundle-size measurements, not measured runtime speedups.
+
+## Modern dependency injection: complete
+
+Replaced constructor parameter injection with `inject()` field initializers in
+six classes: `UserComponent`, `AddEditUserComponent`, `AlertDialogComponent`,
+`ConfirmationDialogComponent`, `UserService`, and `ConfirmationDialogService`.
+All 17 injected dependencies retain their existing field names and visibility.
+
+| Previous syntax | Current equivalent |
+| --- | --- |
+| `constructor(private userService: UserService) {}` | `private userService = inject(UserService);` |
+| `@Inject(MAT_DIALOG_DATA) public data: any` | `public data = inject<any>(MAT_DIALOG_DATA);` |
+| `@Optional() @Inject(MAT_DIALOG_DATA) public data: UserDto \| null` | `public data = inject<UserDto>(MAT_DIALOG_DATA, { optional: true });` |
+| Optional `MatDialogRef` constructor parameter | `inject<MatDialogRef<AddEditUserComponent>>(MatDialogRef, { optional: true })` |
+
+`inject()` requests a dependency from Angular's injector. It does not
+replace providers, change service scope, or create a separate instance per call.
+With `{ optional: true }`, the result includes `null` when no provider exists;
+this preserves direct `/user` navigation as well as popup mode.
+
+Field initializers run while Angular is creating the class, which is a valid
+injection context. Moving these calls into arbitrary methods or `ngOnInit()`
+would not supply that context automatically.
+
+`UserService` no longer needs its constructor containing only DI and `super()`;
+the derived class's implicit constructor still invokes the base constructor.
+The empty non-DI constructor in `BaseService` is unchanged. No lifecycle hooks,
+HTTP contracts, provider configuration, templates, or save/cancel logic changed.
+
+Validation: production build and diff checks passed. Browser checks exercised
+direct form rendering, offline save error handling with injected alert data,
+alert OK, popup opening, and popup Cancel. The backend refused connection, so no
+live CRUD success flow was established. No automated test files were recreated.
 
 ## What `standalone: false` meant before conversion
 
@@ -185,6 +218,7 @@ changes currently require manual verification and a production build.
 - [Angular version compatibility](https://angular.dev/reference/versions)
 - [Angular update guide](https://angular.dev/update-guide)
 - [NgModules and standalone declarations](https://angular.dev/guide/ngmodules/overview)
+- [Modern inject() migration](https://angular.dev/reference/migrations/inject-function)
 - [Zoneless change detection](https://angular.dev/guide/zoneless)
 - [Build system migration](https://angular.dev/tools/cli/build-system-migration)
 - [Template control flow](https://angular.dev/guide/templates/control-flow)

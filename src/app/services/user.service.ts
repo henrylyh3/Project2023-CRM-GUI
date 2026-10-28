@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UserDto } from '@models/user-dto';
 
 import { Observable } from 'rxjs';
@@ -10,9 +10,7 @@ import { BaseService } from './base/base-service';
   providedIn: 'root',
 })
 export class UserService extends BaseService {
-  constructor(private httpClient: HttpClient) {
-    super();
-  }
+  private httpClient = inject(HttpClient);
 
   public getUsers(): Observable<any> {
     return this.httpClient.get(`${this.baseURL}/User/users`).pipe(

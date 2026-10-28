@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -70,13 +70,12 @@ export class UserComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   selectedUser: UserDto;
-  constructor(private router: Router,
-    private route: ActivatedRoute,
-    private confirmationDialogService: ConfirmationDialogService,
-    public dialog: MatDialog,
-    private fb: FormBuilder,
-    private userService : UserService
-   ) { }
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private confirmationDialogService = inject(ConfirmationDialogService);
+  public dialog = inject(MatDialog);
+  private fb = inject(FormBuilder);
+  private userService = inject(UserService);
 
   ngOnInit(): void {
     this.getUsers();

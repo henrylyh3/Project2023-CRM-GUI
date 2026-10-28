@@ -3,7 +3,8 @@
 <!-- ABOUT THE PROJECT -->
 This is a simple project that is built for accessing a list of contact that have details of its username, email, phone, skills and hobbies.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.2.
+Originally generated with Angular CLI 16.2.2; upgraded to Angular 22.2.3,
+Angular CLI 22.2.5, and Angular Material/CDK 22.2.4.
 
 There is only one page in this project which is the user listing page, any other operation (add, edit, delete) will be in the form of popup for the specific purpose.
 
@@ -14,9 +15,27 @@ This project is mainly using angular material for the styling and component. It 
 
 
 <!-- GETTING STARTED -->
-Guide to install Angular : https://angular.io/guide/setup-local
+Use a supported Node.js version: 22.22.3+, 24.15.0+, or 26.x. The upgrade was
+validated with Node.js 26.11.1 and npm 12.2.0.
 
-Run `npm-install` to install packages and then `npm start` to run the project
+```sh
+npm ci
+npm start
+```
+
+The API configured in `src/environments/environment.ts` must be running at
+`https://localhost:5266/api` for live contact operations.
+
+```sh
+npm run build
+npm run test:ci
+```
+
+Tests use Chrome Headless. Install Google Chrome, or set `CHROME_BIN` to its
+executable path. Tests mock backend requests and do not modify real contacts.
+
+See [Angular upgrade and interview notes](./ANGULAR-UPGRADE.md) for architectural
+decisions, version differences, and an interview explanation.
 
 
 <!-- How to Use the Project -->

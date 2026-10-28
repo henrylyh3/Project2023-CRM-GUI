@@ -1,6 +1,6 @@
 import { finalize } from 'rxjs/operators';
 
-import { Component, Input, OnInit, Inject } from '@angular/core';
+import { Component, Input, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 
@@ -14,6 +14,8 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     selector: 'CRM-add-edit-user',
     templateUrl: './add-edit-user.component.html',
     styles: [],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class AddEditUserComponent implements OnInit {
     mode="Add";

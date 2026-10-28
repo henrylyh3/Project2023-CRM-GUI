@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,15 +8,17 @@ import { AddEditUserComponent } from './add-edit-user/add-edit-user.component';
 import { UserDto } from '@models/user-dto';
 import { UserService } from '@services/user.service';
 import { ConfirmationDialogService } from '@services/confirmation-dialog-service';
-import {NgFor} from '@angular/common';
+
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { AlertDialogComponent } from '@main/common/alert-dialog.component'; 
 
 @Component({
-  selector: 'CRM-user',
-  templateUrl: './user.component.html',
-  styles: [],
+    selector: 'CRM-user',
+    templateUrl: './user.component.html',
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class UserComponent implements OnInit {
  isBusy = true;

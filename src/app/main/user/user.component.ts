@@ -1,5 +1,9 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
@@ -18,7 +22,15 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     templateUrl: './user.component.html',
     styles: [],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [
+      FormsModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatButtonModule,
+      MatIconModule,
+      MatTableModule,
+      MatPaginatorModule,
+    ]
 })
 export class UserComponent implements OnInit {
  isBusy = true;

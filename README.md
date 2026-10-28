@@ -28,11 +28,9 @@ The API configured in `src/environments/environment.ts` must be running at
 
 ```sh
 npm run build
-npm run test:ci
 ```
 
-Tests use Chrome Headless. Install Google Chrome, or set `CHROME_BIN` to its
-executable path. Tests mock backend requests and do not modify real contacts.
+Automated test files, runner configuration, and test commands have been removed.
 
 See [Angular upgrade and interview notes](./ANGULAR-UPGRADE.md) for architectural
 decisions, version differences, and an interview explanation.

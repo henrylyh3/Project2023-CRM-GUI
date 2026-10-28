@@ -1,12 +1,10 @@
 /// <reference types="@angular/localize" />
 
-import { provideZoneChangeDetection } from '@angular/core';
-import { platformBrowser } from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
 
-import { AppModule } from './app/app.module';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
 
 
-platformBrowser().bootstrapModule(AppModule, {
-  applicationProviders: [provideZoneChangeDetection()],
-})
+bootstrapApplication(AppComponent, appConfig)
   .catch(err => console.error(err));

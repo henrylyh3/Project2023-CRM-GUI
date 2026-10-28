@@ -1,7 +1,12 @@
 import { finalize } from 'rxjs/operators';
 
-import { Component, Input, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit, Inject, Optional, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { Observable, Observer } from 'rxjs';
 
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
@@ -15,7 +20,7 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     templateUrl: './add-edit-user.component.html',
     styles: [],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule]
 })
 export class AddEditUserComponent implements OnInit {
     mode="Add";
@@ -24,8 +29,9 @@ export class AddEditUserComponent implements OnInit {
         private formBuilder: FormBuilder,
         private userService : UserService,
         private dialog: MatDialog,
-        public dialogRef: MatDialogRef<AddEditUserComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: UserDto,
+        @Optional() public dialogRef: MatDialogRef<AddEditUserComponent> | null,
+        @Optional() @Inject(MAT_DIALOG_DATA) public data: UserDto | null,
+        private router: Router,
     ) {
 
      }
@@ -43,7 +49,7 @@ export class AddEditUserComponent implements OnInit {
         {
             this.userService.createUser(this.user).subscribe(
                 () => {
-                    this.dialogRef.close();
+                    this.cancel();
                     const dialogRef = this.dialog.open(AlertDialogComponent, {
                         width: '250px',
                         data: {
@@ -53,7 +59,7 @@ export class AddEditUserComponent implements OnInit {
                     });
                 },
                 (error) => {
-                    this.dialogRef.close();
+                    this.cancel();
                     const dialogRef = this.dialog.open(AlertDialogComponent, {
                         width: '250px',
                         data: {
@@ -68,7 +74,7 @@ export class AddEditUserComponent implements OnInit {
         {
             this.userService.updateUser(this.user).subscribe(
                 () => {
-                    this.dialogRef.close();
+                    this.cancel();
                     const dialogRef = this.dialog.open(AlertDialogComponent, {
                         width: '250px',
                         data: {
@@ -78,7 +84,7 @@ export class AddEditUserComponent implements OnInit {
                     });
                 },
                 (error) => {
-                    this.dialogRef.close();
+                    this.cancel();
                     const dialogRef = this.dialog.open(AlertDialogComponent, {
                         width: '250px',
                         data: {
@@ -92,6 +98,10 @@ export class AddEditUserComponent implements OnInit {
     }
 
     cancel(): void {
-        this.dialogRef.close();
+        if (this.dialogRef) {
+            this.dialogRef.close();
+        } else {
+            void this.router.navigateByUrl('/');
+        }
     }
 }

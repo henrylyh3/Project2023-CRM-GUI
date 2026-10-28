@@ -1,5 +1,6 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     template: `
@@ -12,7 +13,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     </mat-dialog-actions>
   `,
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [MatDialogModule, MatButtonModule]
 })
 export class AlertDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}

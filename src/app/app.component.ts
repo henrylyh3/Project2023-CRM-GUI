@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -8,12 +8,4 @@ import { RouterOutlet } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [RouterOutlet]
 })
-export class AppComponent {
-  title = 'CRM-GUI';
-
-
-  ngOnInit(): void {
-    // this.spinner.show();
-
-  }
-}
+export class AppComponent {}

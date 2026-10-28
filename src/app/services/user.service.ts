@@ -3,7 +3,6 @@ import { Injectable, inject } from '@angular/core';
 import { UserDto } from '@models/user-dto';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { BaseService } from './base/base-service';
 
 @Injectable({
@@ -13,19 +12,11 @@ export class UserService extends BaseService {
   private httpClient = inject(HttpClient);
 
   public getUsers(): Observable<any> {
-    return this.httpClient.get(`${this.baseURL}/User/users`).pipe(
-      map((result: any) => {
-        return result;
-      }),
-    );
+    return this.httpClient.get(`${this.baseURL}/User/users`);
   }
 
   public getUserById(id: string): Observable<UserDto> {
-    return this.httpClient.get(`${this.baseURL}/User/user/${id}`).pipe(
-      map((result: any) => {
-        return result;
-      }),
-    );
+    return this.httpClient.get<UserDto>(`${this.baseURL}/User/user/${id}`);
   }
 
   public updateUser(input: UserDto): Observable<any> {

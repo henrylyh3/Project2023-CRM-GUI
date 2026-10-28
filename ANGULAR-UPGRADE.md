@@ -29,7 +29,7 @@ Bootstrap now loads its distributed CSS, preserving its original stylesheet
 order without deprecated application-level Sass imports. The application
 builder still writes deployment files to `dist/crm-gui`, preserving the old path.
 
-- `npm run build` after modern DI migration: passed. Initial bundle 790.88 kB raw / 149.85 kB estimated
+- `npm run build` after code cleanup: passed. Initial bundle 787.10 kB raw / 149.37 kB estimated
   transfer. Existing 500 kB warning threshold remains exceeded; 1 MB error
   threshold remains unchanged.
 - Historical step 2 test run: 26 tests passed in Chrome Headless. Coverage included HTTP
@@ -88,7 +88,7 @@ errors, name binding updates, routed Cancel returns to `/`, and the Add popup
 still opens and cancels. No contacts were saved during these checks.
 
 This migration retains templates, DTOs, HTTP methods/URLs, CRUD request payloads,
-template-driven forms, lifecycle hooks, eager checking, and Zone-based scheduling.
+template-driven forms, active lifecycle hooks, eager checking, and Zone-based scheduling.
 Signals, OnPush, and zoneless conversion are separate future steps.
 
 Measured production initial bundle: 806.38 kB before standalone conversion,
@@ -100,7 +100,8 @@ These are bundle-size measurements, not measured runtime speedups.
 Replaced constructor parameter injection with `inject()` field initializers in
 six classes: `UserComponent`, `AddEditUserComponent`, `AlertDialogComponent`,
 `ConfirmationDialogComponent`, `UserService`, and `ConfirmationDialogService`.
-All 17 injected dependencies retain their existing field names and visibility.
+The initial DI migration retained all 17 dependency field names and visibility.
+The subsequent cleanup removed four unused injected fields.
 
 | Previous syntax | Current equivalent |
 | --- | --- |
@@ -120,13 +121,39 @@ would not supply that context automatically.
 
 `UserService` no longer needs its constructor containing only DI and `super()`;
 the derived class's implicit constructor still invokes the base constructor.
-The empty non-DI constructor in `BaseService` is unchanged. No lifecycle hooks,
+At that stage, the empty non-DI constructor in `BaseService` was unchanged. No lifecycle hooks,
 HTTP contracts, provider configuration, templates, or save/cancel logic changed.
 
 Validation: production build and diff checks passed. Browser checks exercised
 direct form rendering, offline save error handling with injected alert data,
 alert OK, popup opening, and popup Cancel. The backend refused connection, so no
 live CRUD success flow was established. No automated test files were recreated.
+
+## Code cleanup: complete
+
+- Removed unused TypeScript imports and four unused injections: the list's
+  `Router`, `ActivatedRoute`, and `FormBuilder`, plus the form's `FormBuilder`.
+- Removed unused root `title`, list `isBusy` / `selectedUser` fields, the unused
+  temporary edit object, callback arguments, and unused dialog-reference locals.
+  Dialogs still open; references needed for close subscriptions remain.
+- Removed the empty root `ngOnInit()` and empty `BaseService` constructor.
+  `ngOnInit()` remains in the list and form because those hooks perform work.
+- Removed debug console logs and dead/commented-out code. No active styling or
+  rendered markup changed.
+- Removed two identity `map` operators in `UserService`; GET requests return
+  the HttpClient Observable directly. URLs, methods, payloads, response values,
+  and error propagation are unchanged. `getUserById` uses `get<UserDto>()` for
+  its existing return contract.
+
+Validation: production build, unused-code checks, and `git diff --check` passed.
+The unused-code check was run explicitly without changing compiler settings:
+
+```sh
+npx tsc --project tsconfig.app.json --noEmit --noUnusedLocals --noUnusedParameters
+```
+
+No automated test files were added. This cleanup did not change state to signals,
+switch to OnPush, remove Zone.js, or replace template-driven forms.
 
 ## What `standalone: false` meant before conversion
 

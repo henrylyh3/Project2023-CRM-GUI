@@ -1,12 +1,10 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
-import { FormBuilder, FormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AddEditUserComponent } from './add-edit-user/add-edit-user.component';
 
 import { UserDto } from '@models/user-dto';
@@ -33,7 +31,6 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     ]
 })
 export class UserComponent implements OnInit {
- isBusy = true;
 
   columns = [
     {
@@ -69,12 +66,8 @@ export class UserComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  selectedUser: UserDto;
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private confirmationDialogService = inject(ConfirmationDialogService);
   public dialog = inject(MatDialog);
-  private fb = inject(FormBuilder);
   private userService = inject(UserService);
 
   ngOnInit(): void {
@@ -95,37 +88,29 @@ export class UserComponent implements OnInit {
   openAddDialog(): void {
     const dialogRef = this.dialog.open(AddEditUserComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(() => {
       this.getUsers();
     });
   }
 
   openEditDialog(input: number): void {
-    var result = new UserDto();
-    result= this.dataSource.filteredData[input];
-
     const dialogRef = this.dialog.open(AddEditUserComponent, {
       data: this.dataSource.filteredData[input],
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(() => {
       this.getUsers();
     });
   }
 
 
   delete(input: number): void {
-    console.log(this.dataSource.filteredData[input]);
     this.confirmationDialogService
     .openConfirmationDialog('Delete', 'Are you sure you want to proceed?')
     .subscribe((confirmed) => {
       if (confirmed) {
-        // User confirmed, proceed with the action
-        // Add your action here
-        console.log('User confirmed');
         this.userService.deleteUser(this.dataSource.filteredData[input].id).subscribe(
           () => {
-              // this.dialogRef.close();
               const dialogRef = this.dialog.open(AlertDialogComponent, {
                   width: '250px',
                   data: {
@@ -133,12 +118,12 @@ export class UserComponent implements OnInit {
                   message: 'Successfully delete user.'
                   }
               });
-              dialogRef.afterClosed().subscribe(result => {
+              dialogRef.afterClosed().subscribe(() => {
                 this.getUsers();
               });
           },
-          (error) => {
-              const dialogRef = this.dialog.open(AlertDialogComponent, {
+          () => {
+              this.dialog.open(AlertDialogComponent, {
                   width: '250px',
                   data: {
                   title: 'Error',
@@ -147,9 +132,6 @@ export class UserComponent implements OnInit {
               });
           },
       );
-      } else {
-        // User canceled
-        console.log('User canceled');
       }
     });
 

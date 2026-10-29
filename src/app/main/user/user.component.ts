@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, computed, effect, inject, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, DestroyRef, computed, effect, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -74,6 +75,7 @@ export class UserComponent implements OnInit {
   private confirmationDialogService = inject(ConfirmationDialogService);
   public dialog = inject(MatDialog);
   private userService = inject(UserService);
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     effect(() => {
@@ -87,7 +89,7 @@ export class UserComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.userService.getUsers().subscribe((result) => {
+    this.userService.getUsers().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
       this.users.set(result);
     });
   }
@@ -95,7 +97,7 @@ export class UserComponent implements OnInit {
   openAddDialog(): void {
     const dialogRef = this.dialog.open(AddEditUserComponent);
 
-    dialogRef.afterClosed().subscribe(() => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.getUsers();
     });
   }
@@ -105,7 +107,7 @@ export class UserComponent implements OnInit {
       data: { ...user },
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.getUsers();
     });
   }
@@ -114,8 +116,10 @@ export class UserComponent implements OnInit {
   delete(user: UserDto): void {
     this.confirmationDialogService
     .openConfirmationDialog('Delete', 'Are you sure you want to proceed?')
+    .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe((confirmed) => {
       if (confirmed) {
+        // Keep this finite write subscribed even if the list is destroyed.
         this.userService.deleteUser(user.id).subscribe(
           () => {
               const dialogRef = this.dialog.open(AlertDialogComponent, {
@@ -125,7 +129,7 @@ export class UserComponent implements OnInit {
                   message: 'Successfully delete user.'
                   }
               });
-              dialogRef.afterClosed().subscribe(() => {
+              dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
                 this.getUsers();
               });
           },

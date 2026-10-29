@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ChangeDetectionStrategy, DestroyRef, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormsModule } from '@angular/forms';
+import { form, FormField } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -22,7 +22,7 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     styles: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-      FormsModule,
+      FormField,
       MatFormFieldModule,
       MatInputModule,
       MatButtonModule,
@@ -61,6 +61,7 @@ export class UserComponent implements OnInit {
     },
   ];
   readonly filter = signal('');
+  readonly filterForm = form(this.filter);
   readonly users = signal<UserDto[]>([]);
   readonly totalUsers = computed(() => this.users().length);
   readonly dataSource = new MatTableDataSource<UserDto>([]);

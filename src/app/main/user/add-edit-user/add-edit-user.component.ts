@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,11 +17,18 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     templateUrl: './add-edit-user.component.html',
     styles: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule]
+    imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule]
 })
 export class AddEditUserComponent implements OnInit {
     mode="Add";
-    user: UserDto = new UserDto();
+    private user: UserDto = new UserDto();
+    readonly form = inject(NonNullableFormBuilder).group({
+        userName: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        phone: ['', Validators.required],
+        skills: ['', Validators.required],
+        hobbies: ['', Validators.required],
+    });
     private userService = inject(UserService);
     private dialog = inject(MatDialog);
     public dialogRef = inject<MatDialogRef<AddEditUserComponent>>(MatDialogRef, { optional: true });
@@ -33,15 +40,21 @@ export class AddEditUserComponent implements OnInit {
         {
             this.mode = "Edit";    
             this.user = this.data;
+            this.form.patchValue(this.data);
         }
     }
 
     save(): void {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+        const user: UserDto = { ...this.user, ...this.form.getRawValue() };
         // Keep finite writes independent of the dialog or routed form lifetime.
         if(this.mode=='Add')
         {
-            this.userService.createUser(this.user).subscribe(
-                () => {
+            this.userService.createUser(user).subscribe({
+                next: () => {
                     this.cancel();
                     this.dialog.open(AlertDialogComponent, {
                         width: '250px',
@@ -51,7 +64,7 @@ export class AddEditUserComponent implements OnInit {
                         }
                     });
                 },
-                () => {
+                error: () => {
                     this.cancel();
                     this.dialog.open(AlertDialogComponent, {
                         width: '250px',
@@ -61,11 +74,11 @@ export class AddEditUserComponent implements OnInit {
                         }
                     });
                 },
-            );
+            });
         }
         else
         {
-            this.userService.updateUser(this.user).subscribe(
+            this.userService.updateUser(user).subscribe(
                 () => {
                     this.cancel();
                     this.dialog.open(AlertDialogComponent, {

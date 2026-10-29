@@ -11,8 +11,8 @@ import { BaseService } from './base/base-service';
 export class UserService extends BaseService {
   private httpClient = inject(HttpClient);
 
-  public getUsers(): Observable<any> {
-    return this.httpClient.get(`${this.baseURL}/User/users`);
+  public getUsers(): Observable<UserDto[]> {
+    return this.httpClient.get<UserDto[]>(`${this.baseURL}/User/users`);
   }
 
   public getUserById(id: string): Observable<UserDto> {

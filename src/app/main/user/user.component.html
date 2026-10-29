@@ -3,9 +3,9 @@
   <div calss="row col-12" style="padding-top: 30px;padding-bottom: 30px;">
     <mat-form-field style="width: 100%; ">
       <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter()" #input [(ngModel)]="filter">
-      @if (filter) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="filter=''">
+      <input matInput [ngModel]="filter()" (ngModelChange)="filter.set($event)">
+      @if (filter()) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="filter.set('')">
           <mat-icon>close</mat-icon>
         </button>
       }
@@ -14,6 +14,8 @@
     <button style="float: right;" mat-raised-button color="primary" (click)="openAddDialog()">Add new</button>
 
   </div>
+
+  <p aria-live="polite">Total contacts: {{ totalUsers() }}</p>
 
   <div class="mat-elevation-z8" style="margin-top: 30px;">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
@@ -51,9 +53,9 @@
       <!-- action column -->
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef> Action </th>
-        <td mat-cell *matCellDef="let person; let i = index">
-          <button mat-raised-button color="primary" (click)="openEditDialog(i)">Edit</button>
-          <button mat-raised-button color="primary" (click)="delete(i)">Delete</button>
+        <td mat-cell *matCellDef="let person">
+          <button mat-raised-button color="primary" (click)="openEditDialog(person)">Edit</button>
+          <button mat-raised-button color="primary" (click)="delete(person)">Delete</button>
         </td>
       </ng-container>
 

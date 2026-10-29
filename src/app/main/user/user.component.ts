@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -59,16 +59,28 @@ export class UserComponent implements OnInit {
       cell: (element: UserDto) => `${element.hobbies}`,
     },
   ];
-  filter='';
-  dataSource : any;
+  readonly filter = signal('');
+  readonly users = signal<UserDto[]>([]);
+  readonly totalUsers = computed(() => this.users().length);
+  readonly dataSource = new MatTableDataSource<UserDto>([]);
   displayedColumns = this.columns.map(c => c.columnDef);
   columnsToDisplayWithExpand = [...this.displayedColumns, 'action'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator)
+  set paginator(paginator: MatPaginator) {
+    this.dataSource.paginator = paginator;
+  }
 
   private confirmationDialogService = inject(ConfirmationDialogService);
   public dialog = inject(MatDialog);
   private userService = inject(UserService);
+
+  constructor() {
+    effect(() => {
+      this.dataSource.data = this.users();
+      this.dataSource.filter = this.filter().trim().toLowerCase();
+    });
+  }
 
   ngOnInit(): void {
     this.getUsers();
@@ -76,13 +88,8 @@ export class UserComponent implements OnInit {
 
   getUsers(): void {
     this.userService.getUsers().subscribe((result) => {
-      this.dataSource = new MatTableDataSource<UserDto>(result);
-      this.dataSource.paginator = this.paginator;
+      this.users.set(result);
     });
-  }
-  
-  applyFilter() {
-    this.dataSource.filter = this.filter.trim().toLowerCase();
   }
 
   openAddDialog(): void {
@@ -93,9 +100,9 @@ export class UserComponent implements OnInit {
     });
   }
 
-  openEditDialog(input: number): void {
+  openEditDialog(user: UserDto): void {
     const dialogRef = this.dialog.open(AddEditUserComponent, {
-      data: this.dataSource.filteredData[input],
+      data: { ...user },
     });
 
     dialogRef.afterClosed().subscribe(() => {
@@ -104,12 +111,12 @@ export class UserComponent implements OnInit {
   }
 
 
-  delete(input: number): void {
+  delete(user: UserDto): void {
     this.confirmationDialogService
     .openConfirmationDialog('Delete', 'Are you sure you want to proceed?')
     .subscribe((confirmed) => {
       if (confirmed) {
-        this.userService.deleteUser(this.dataSource.filteredData[input].id).subscribe(
+        this.userService.deleteUser(user.id).subscribe(
           () => {
               const dialogRef = this.dialog.open(AlertDialogComponent, {
                   width: '250px',

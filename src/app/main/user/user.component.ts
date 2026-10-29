@@ -20,7 +20,7 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     selector: 'CRM-user',
     templateUrl: './user.component.html',
     styles: [],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
       FormsModule,
       MatFormFieldModule,

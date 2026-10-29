@@ -16,7 +16,7 @@ import { AlertDialogComponent } from '@main/common/alert-dialog.component';
     selector: 'CRM-add-edit-user',
     templateUrl: './add-edit-user.component.html',
     styles: [],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule]
 })
 export class AddEditUserComponent implements OnInit {

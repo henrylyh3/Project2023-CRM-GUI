@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
       <button mat-button mat-raised-button color="primary" (click)="onConfirmClick()">Confirm</button>
     </mat-dialog-actions>
   `,
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatDialogModule, MatButtonModule]
 })
 export class ConfirmationDialogComponent {

@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
       <button mat-button mat-dialog-close>OK</button>
     </mat-dialog-actions>
   `,
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatDialogModule, MatButtonModule]
 })
 export class AlertDialogComponent {

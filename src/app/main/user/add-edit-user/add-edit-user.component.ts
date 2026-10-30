@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -34,6 +35,14 @@ export class AddEditUserComponent implements OnInit {
     public dialogRef = inject<MatDialogRef<AddEditUserComponent>>(MatDialogRef, { optional: true });
     public data = inject<UserDto>(MAT_DIALOG_DATA, { optional: true });
     private router = inject(Router);
+    private readonly cdr = inject(ChangeDetectorRef);
+
+    constructor() {
+        // Notify the OnPush view when reactive form state changes programmatically.
+        this.form.events.pipe(takeUntilDestroyed()).subscribe(() => {
+            this.cdr.markForCheck();
+        });
+    }
 
     ngOnInit(): void {
         if(this.data)
